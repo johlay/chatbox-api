@@ -3,7 +3,7 @@ package mvc
 import (
 	"chatbox-api/internal/db"
 	"chatbox-api/internal/db/model"
-	"chatbox-api/internal/db/response"
+	"chatbox-api/internal/response"
 	"context"
 	"encoding/json"
 	"fmt"
