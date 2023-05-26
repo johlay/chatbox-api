@@ -1,18 +1,23 @@
 package mvc
 
 import (
+	"chatbox-api/internal/mvc/controllers"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
+var Router = mux.NewRouter()
+
+func userRoutes() {
+	s := Router.PathPrefix("/api/user").Subrouter()
+
+	s.HandleFunc("/login", controllers.HandleLogin)
+	s.HandleFunc("/register", controllers.HandleRegister).Methods("POST")
+}
+
 func SetupRouter() {
-	r := mux.NewRouter()
+	userRoutes()
 
-	s := r.PathPrefix("/api/user").Subrouter()
-
-	s.HandleFunc("/login", HandleLogin)
-	s.HandleFunc("/register", HandleRegister).Methods("POST")
-
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8080", Router)
 }

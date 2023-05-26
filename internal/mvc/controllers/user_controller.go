@@ -1,4 +1,4 @@
-package mvc
+package controllers
 
 import (
 	"chatbox-api/internal/db"
@@ -45,12 +45,22 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	hashedPassword, err := HashPassword(body.Password)
+
+	if err != nil {
+		response.HandleErrorResponse(w, 500, response.ErrorResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "Error occured while hashing the pass",
+			Data:    map[string]interface{}{},
+		})
+	}
+
 	newUser := model.User{
 		ID:         primitive.NewObjectID(),
 		First_name: body.First_name,
 		Last_name:  body.Last_name,
 		Email:      body.Email,
-		Password:   body.Password,
+		Password:   hashedPassword,
 	}
 
 	result, err := userCollection.InsertOne(context.TODO(), newUser)
