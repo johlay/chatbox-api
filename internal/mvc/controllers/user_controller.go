@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -31,6 +33,17 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 			Data:    map[string]interface{}{},
 		})
 		return
+	} else {
+		// Needs to be refactored
+		values := reflect.ValueOf(body)
+		bodyLength := reflect.ValueOf(body).NumField()
+
+		for i := 0; i < bodyLength; i++ {
+			if values.Field(i).Kind() == reflect.String {
+				v := strings.TrimSpace(values.Field(i).Interface().(string))
+				reflect.ValueOf(&body).Elem().Field(i).SetString(v)
+			}
+		}
 	}
 
 	filter := bson.D{{Key: "email", Value: body.Email}}
