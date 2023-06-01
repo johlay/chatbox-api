@@ -8,9 +8,9 @@ import (
 )
 
 type ErrorResponse struct {
-	Status  int
-	Message string
-	Data    map[string]interface{}
+	Status  int                    `json:"status"`
+	Message string                 `json:"message"`
+	Data    map[string]interface{} `json:"data"`
 }
 
 type LoginCredentialsResponse struct {
@@ -26,9 +26,9 @@ type LoginSuccessResponse struct {
 }
 
 type SuccessResponse struct {
-	Status  int
-	Message string
-	Data    interface{}
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type UserResponse struct {
