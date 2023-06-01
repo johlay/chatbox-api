@@ -6,9 +6,25 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var JWT_ACCESS_TOKEN_SECRET = secrets.GetEnv("JWT_ACCESS_TOKEN_SECRET")
+var JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR = ConvertStringToInt(secrets.GetEnv("JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR"))
+
+type JWTCustomClaims[T any] struct {
+	Payload T `json:"access_token"`
+	jwt.RegisteredClaims
+}
+
+func CheckPasswordHash(password, dbPasswordHash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(dbPasswordHash), []byte(password))
+
+	return err == nil
+}
 
 func ConvertStringToInt(s string) int {
 	v, err := strconv.Atoi(s)
@@ -18,6 +34,19 @@ func ConvertStringToInt(s string) int {
 	}
 
 	return v
+}
+
+func GenerateJWTAccessToken[T any](payload T) (string, error) {
+	claims := JWTCustomClaims[T]{payload,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR))),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ss, err := token.SignedString([]byte(JWT_ACCESS_TOKEN_SECRET))
+
+	return ss, err
 }
 
 func HashPassword(password string) (string, error) {

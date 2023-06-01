@@ -3,12 +3,26 @@ package response
 import (
 	"encoding/json"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ErrorResponse struct {
 	Status  int
 	Message string
 	Data    map[string]interface{}
+}
+
+type LoginCredentialsResponse struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type LoginSuccessResponse struct {
+	ID         primitive.ObjectID `json:"_id"`
+	Email      string             `json:"email"`
+	First_name string             `json:"first_name"`
+	Last_name  string             `json:"last_name"`
 }
 
 type SuccessResponse struct {
