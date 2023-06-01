@@ -3,11 +3,13 @@ package mvc
 import (
 	"chatbox-api/internal/mvc/controllers"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
 
 var Router = mux.NewRouter()
+var PORT = os.Getenv("PORT")
 
 func userRoutes() {
 	s := Router.PathPrefix("/api/user").Subrouter()
@@ -19,5 +21,5 @@ func userRoutes() {
 func SetupRouter() {
 	userRoutes()
 
-	http.ListenAndServe(":8080", Router)
+	http.ListenAndServe(":"+PORT, Router)
 }
