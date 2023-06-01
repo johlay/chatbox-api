@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"chatbox-api/pkg/secrets"
+	"chatbox-api/pkg/config"
 	"log"
 	"reflect"
 	"strconv"
@@ -12,8 +12,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var JWT_ACCESS_TOKEN_SECRET = secrets.GetEnv("JWT_ACCESS_TOKEN_SECRET")
-var JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR = ConvertStringToInt(secrets.GetEnv("JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR"))
+var JWT_ACCESS_TOKEN_SECRET = config.GetEnv("JWT_ACCESS_TOKEN_SECRET")
+var JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR = ConvertStringToInt(config.GetEnv("JWT_ACCESS_TOKEN_EXPIRY_TIME_HOUR"))
 
 type JWTCustomClaims[T any] struct {
 	Payload T `json:"access_token"`
@@ -50,7 +50,7 @@ func GenerateJWTAccessToken[T any](payload T) (string, error) {
 }
 
 func HashPassword(password string) (string, error) {
-	passwordHashCost := ConvertStringToInt(secrets.GetEnv("PASSWORD_HASH_COST"))
+	passwordHashCost := ConvertStringToInt(config.GetEnv("PASSWORD_HASH_COST"))
 
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), passwordHashCost)
 

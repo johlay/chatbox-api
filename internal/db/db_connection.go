@@ -1,7 +1,7 @@
 package db
 
 import (
-	"chatbox-api/pkg/secrets"
+	"chatbox-api/pkg/config"
 	"context"
 	"fmt"
 
@@ -13,7 +13,7 @@ import (
 var DB *mongo.Client = DBConnect()
 
 func DBConnect() *mongo.Client {
-	var uri = secrets.GetEnv("MONGODB_CONNECTION")
+	var uri = config.GetEnv("MONGODB_CONNECTION")
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
