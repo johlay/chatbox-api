@@ -6,6 +6,7 @@ require (
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/gorilla/mux v1.8.0
+	github.com/rs/cors v1.9.0
 	go.mongodb.org/mongo-driver v1.11.6
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 )
